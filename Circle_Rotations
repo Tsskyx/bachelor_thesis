@@ -1,0 +1,47 @@
+// angle is the adjustable parameter here
+// one full rotation = TAU, 1rad rotation = 1
+
+// visit https://processing.org/reference and
+// https://docs.oracle.com/javase/tutorial/
+// for further details
+
+int R = 200;
+float tsz = 50;
+float angle = TAU / 100;
+
+void setup() {
+  size(600, 600);
+  textSize(tsz);
+  strokeWeight(2);
+  textAlign(CENTER, CENTER);
+  background(255);
+  translate(width / 2, height / 2);
+  ellipse(0, 0, R * 2, R * 2);
+  line(R - tsz * 2 / 5, 0, R + tsz * 2 / 5, 0);
+  line(-R - tsz * 2 / 5, 0, -R + tsz * 2 / 5, 0);
+  line(0, R - tsz * 2 / 5, 0, R + tsz * 2 / 5);
+  line(0, -R - tsz * 2 / 5, 0, -R + tsz * 2 / 5);
+  
+  fill(0);
+  text("0", R + tsz, -tsz / 5);
+  text("π", -R - tsz, -tsz / 5);
+  text("π/2", 0, -R - tsz * 5 / 4);
+  text("3π/4", 0, R + tsz * 4 / 5);
+  
+  noFill();
+  line(R - tsz * 0.75, 0, R - tsz * 1.25, 0);
+  pushMatrix();
+  rotate(-angle);
+  line(R - tsz * 0.75, 0, R - tsz * 1.25, 0);
+  line(R - tsz * 0.75, 0, R - tsz * 1, -tsz * 0.25);
+  line(R - tsz * 0.75, 0, R - tsz * 1, tsz * 0.25);
+  popMatrix();
+  arc(0, 0, R * 2 - tsz * 2.5, R * 2 - tsz * 2.5, -angle, 0);
+  
+  for (int i = 0; i < 1024; i++) {
+    ellipse(R, 0, 15, 15);
+    rotate(-angle);
+  }
+  
+  save("img.png");
+}
