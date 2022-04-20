@@ -1,5 +1,6 @@
 // angle is the adjustable parameter here
 // one full rotation = TAU, 1rad rotation = 1
+// an image is automatically exported upon launch
 
 // visit https://processing.org/reference and
 // https://docs.oracle.com/javase/tutorial/
