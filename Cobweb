@@ -1,0 +1,98 @@
+// mu: parameter of the function
+// init_x: the initial condition of the orbit
+// variable_input: set to 'true' for mouse input
+// myMap: change this function to change the map
+// (a preset has been left for the tent map)
+// press any key to export the image
+
+// visit https://processing.org/reference and
+// https://docs.oracle.com/javase/tutorial/
+// for further details
+
+float axisOffset, mu = 1.5;
+float init_x = 0.5;
+boolean variable_input = false;
+
+void setup() {
+  size(600, 600);
+  axisOffset = width * 0.1;
+  strokeWeight(2);
+  textAlign(CENTER, CENTER);
+  fill(0);
+  textSize(axisOffset / 2);
+}
+
+void draw() {
+  background(255);
+  drawAxis();
+  drawGraph();
+  drawIters();
+}
+
+void drawAxis() {
+  line(axisOffset, axisOffset, axisOffset, height - axisOffset);
+  line(axisOffset, height - axisOffset, width - axisOffset, height - axisOffset);
+  text(0, axisOffset / 2, height - (axisOffset * 3 / 4));
+  
+  line(axisOffset, height / 2, axisOffset * 3 / 2, height / 2);
+  line(axisOffset, axisOffset, axisOffset * 3 / 2, axisOffset);
+  text(nf(0.5, 0, 1), axisOffset / 2, height / 2 - axisOffset / 16);
+  text(1, axisOffset / 2, axisOffset - axisOffset / 16);
+  
+  line(width / 2, height - axisOffset, width / 2, height - axisOffset * 3 / 2);
+  line(width - axisOffset, height - axisOffset, width - axisOffset, height - axisOffset * 3 / 2);
+  text(nf(0.5, 0, 1), width / 2, height - axisOffset * 3 / 4);
+  text(1, width - axisOffset, height - axisOffset * 3 / 4);
+}
+
+void drawGraph() {
+  float iters = 32;
+  
+  for (int i = 0; i < iters; i++) {
+    float x1 = i / iters;
+    float x2 = (i + 1) / iters;
+    line(remapX(x1), remapY(myMap(x1)), remapX(x2), remapY(myMap(x2)));
+  }
+  
+  line(remapX(0), remapY(0), remapX(1), remapY(1));
+}
+
+void drawIters() {
+  pushStyle();
+  stroke(255, 0, 0);
+  
+  float x = variable_input ? map(mouseX, 0, width, 0, 1) : init_x;
+  
+  line(remapX(x), remapY(0), remapX(x), remapY(myMap(x)));
+  
+  float iters = 64;
+  
+  for (int i = 0; i < iters; i++) {
+      line(remapX(x), remapY(myMap(x)), remapX(myMap(x)), remapY(myMap(x)));
+      x = myMap(x);
+      line(remapX(x), remapY(x), remapX(x), remapY(myMap(x)));
+  }
+  
+  popStyle();
+}
+
+float myMap(float val) {
+  return mu * val * (1 - val);
+  //return mu * min(val, 1 - val);
+}
+
+float remapX(float val) {
+  return map(val, 0, 1, axisOffset, width - axisOffset);
+}
+
+float remapY(float val) {
+  return map(val, 0, 1, height - axisOffset, axisOffset);
+}
+
+void mouseWheel(MouseEvent e) {
+  mu -= 0.01 * e.getCount();
+}
+
+void keyPressed() {
+  save("cobweb.png");
+}
