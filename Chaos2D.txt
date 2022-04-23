@@ -1,0 +1,110 @@
+// discardIters: number of iterations to discard at the beginning
+// renderIters: number of iterations to render afterwards
+// detail: number of points (per row) to compute
+// x1, x2, y1, y2: the area from which the points will be taken
+// X1, X2, Y1, Y2: the display area
+// a, b: parameters of the map
+// press any key to export the image
+
+// visit https://processing.org/reference and
+// https://docs.oracle.com/javase/tutorial/
+// for further details
+
+int discardIters = 100, renderIters = 1;
+int detail = 1000;
+double x1 = -2, x2 = 2, y1 = -2, y2 = 2;
+double X1 = -1.5, X2 = 1.5, Y1 = -1.5, Y2 = 1.5;
+double a = 1.4, b = 0.3;
+
+class Point {
+  double x, y;
+
+  Point(int i) {
+    x = (double)(i % detail) / detail;
+    y = (double)(i / detail) / detail;
+
+    x = x * (x2 - x1) + x1;
+    y = y * (y2 - y1) + y1;
+  }
+
+  void iter() {
+    double $x = x, $y = y;
+
+    // change this to change the map:
+    // (must assign into x and y from $x and $y to prevent value collision)
+
+    x = 1 - a * $x * $x + $y;
+    y = b * $x;
+  }
+
+  void render() {
+    point((float)((x - X1) / (X2 - X1) * (width - 2 * axisOffset) + axisOffset),
+      (float)((1 - (y - Y1) / (Y2 - Y1)) * (height - 2 * axisOffset) + axisOffset));
+  }
+}
+
+Point[] p = new Point[detail * detail];
+float axisOffset;
+
+void setup() {
+  size(800, 800);
+  axisOffset = width * 0.1;
+  textAlign(CENTER, CENTER);
+  fill(0);
+  textSize(axisOffset / 2);
+
+  drawAxis();
+
+  for (int i = 0; i < detail * detail; i++) {
+    p[i] = new Point(i);
+  }
+
+  for (int i = 0; i < discardIters; i++) {
+    for (int j = 0; j < detail * detail; j++) {
+      p[j].iter();
+    }
+  }
+
+  for (int i = 0; i < renderIters; i++) {
+    for (int j = 0; j < detail * detail; j++) {
+      p[j].iter();
+      p[j].render();
+    }
+  }
+}
+
+void drawAxis() {
+  background(255);
+  strokeWeight(2);
+
+  line(axisOffset, height - axisOffset, width - axisOffset, height - axisOffset);
+  line(axisOffset, axisOffset, axisOffset, height - axisOffset);
+  line(width / 2, height - axisOffset, width / 2, height - axisOffset * 3 / 2);
+  line(width - axisOffset, height - axisOffset, width - axisOffset, height - axisOffset * 3 / 2);
+  line(axisOffset, height / 2, axisOffset * 3 / 2, height / 2);
+  line(axisOffset, axisOffset, axisOffset * 3 / 2, axisOffset);
+
+  axisFormat(X1, axisOffset, height - axisOffset / 2 - axisOffset / 16);
+  axisFormat((X1 + X2) / 2, width / 2, height - axisOffset / 2 - axisOffset / 16);
+  axisFormat(X2, width - axisOffset, height - axisOffset / 2 - axisOffset / 16);
+
+  axisFormat(Y1, axisOffset / 2, height - axisOffset - axisOffset / 16);
+  axisFormat((Y1 + Y2) / 2, axisOffset / 2, height / 2 - axisOffset / 16);
+  axisFormat(Y2, axisOffset / 2, axisOffset - axisOffset / 16);
+
+  strokeWeight(1);
+}
+
+void axisFormat(double val, float x, float y) {
+  if ((int)val == val)
+    text((int)val, x, y);
+  else
+    text(str((float)val), x, y);
+}
+
+void keyPressed() {
+  save("img.png");
+}
+
+void draw() {
+}
