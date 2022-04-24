@@ -20,7 +20,7 @@ double[] data = new double[detail];
 
 void setup() {
   size(1000, 1000);
-  axisOffset = width * 0.1;
+  axisOffset = min(width, height) * 0.1;
   strokeWeight(globalLineThickness);
   textAlign(CENTER, CENTER);
   textSize(axisOffset / 2);
