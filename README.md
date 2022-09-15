@@ -1,5 +1,5 @@
 # bachelor_thesis
-A repository for code used for a bachelor thesis, which is available at: https://www.fei.vsb.cz/470/cs/studium/zaverecne-prace/zpBc/
+A repository for code used for a bachelor thesis, which is available at: https://dspace.vsb.cz/handle/10084/147319
 
 To correctly run this code, install Processing (available from https://processing.org/download), paste the code into the IDE and click run. To retrieve exported images, press Ctrl+K, which opens up the project's folder. By default, new projects will be created at C:\\Users\\[username]\\AppData\\Local\\Temp on Windows unless resaved first.
 
